@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ChorChain:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ChorChain</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ChorChain.war">
+      <element id="artifact" artifact-name="ChorChain:war exploded" />
+    </root>
+  </artifact>
+</component>

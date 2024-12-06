@@ -1,5 +1,4 @@
-Chor Chain
-
+Process Manager
 -Requirements:
 
 1) Apache Tomcat version 9 (connect your IDE with it to run the project on Tomcat web server)

@@ -3,8 +3,8 @@
 This repository contains the implementation of the CONFidentiality EnforcemenT TransparencY (CONFETTY) approach presented in the paper 
 entitled: "[Balancing Confidentiality and Transparency for Blockchain-based Process-Aware Information Systems](https://arxiv.org/abs/2412.05737)" submitted at the 37th International Conference on Advanced Information Systems Engineering, [CAiSE 25](https://conferences.big.tuwien.ac.at/caise2025/).
 
-//## Wiki
-//Check out the [Wiki](https://github.com/apwbs/CONFETTY/wiki) for a detailed documentation and step-by-step tutorial to run the system locally.
+<!--## Wiki
+Check out the [Wiki](https://github.com/apwbs/CONFETTY/wiki) for a detailed documentation and step-by-step tutorial to run the system locally.-->
 
 ## This repository
 In this repository, you find several folders necessary to run the system. 

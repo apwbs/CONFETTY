@@ -2,7 +2,7 @@
 
 This repository contains the implementation of the CONFidentiality EnforcemenT TransparencY (CONFETTY) approach submitted at the 23rd International Conference on Business Process Management (BPM 2025), [BPM 25]([https://www.bpm2025seville.org/]).
 
-<!--## Wiki
+## Wiki
 
 
 ## This repository

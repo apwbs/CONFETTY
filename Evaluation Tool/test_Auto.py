@@ -138,6 +138,14 @@ def run_iteration(iteration: int) -> bool:
             text=True
         )
         json_process.wait()
+    else:
+        json_process = subprocess.Popen(
+            ["node", "generateJSONs.js"],
+            stdout=sys.stdout,
+            stderr=subprocess.STDOUT,
+            text=True
+        )
+        json_process.wait()
         
     # Start the API process inside the Docker container using WSL
     api_process = subprocess.Popen(

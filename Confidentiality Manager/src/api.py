@@ -11,18 +11,18 @@ import attribute_certifier
 import data_owner
 import client
 import reader
-import time
 
 import os
 import subprocess
 import signal
 import atexit
+import sys
 
 import re
 
 
 # Used to reset the local databases
-#os.system(f"sh ../sh_files/reset_db.sh")
+os.system(f"sh ../sh_files/reset_db.sh")
 
 app = Flask(__name__)
 CORS(app)
@@ -33,16 +33,19 @@ numberOfAuthorities  = authorities_count()
 # Store the subprocesses globally to access them in the signal handler
 processes = []
 
+def handle_exit(signum=None, frame=None):
+    for p in processes:
+        try:
+            # Kill the entire process group for each subprocess
+            os.killpg(os.getpgid(p.pid), signal.SIGTERM)
+        except Exception as e:
+            pass
+    sys.exit(0)
 
-# To close automatically subprocesses (attribute_certification())
-def handle_exit():
-    for process in processes:
-        # Send SIGTERM to the process group
-        os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-        
-
-# Ensure subprocesses are killed on exit
+# Register the cleanup function for normal exit and signals
 atexit.register(handle_exit)
+signal.signal(signal.SIGINT, handle_exit)  # Handle Ctrl+C
+signal.signal(signal.SIGTERM, handle_exit)
 
 
 # Check if a string is a valid ERC20 address
@@ -147,7 +150,6 @@ def attributes_certification_and_authorities():
         temporal = temporal + str(process_instance_id) + '@' + authority_name + ' and '
     access_policy[file_name] = ('(' + temporal[:-5] + ') and ' + policy)
     """
-    start = time.time()
     process_id = request.json.get('process_id')
     roles = request.json.get('roles')
     policies = request.json.get('policy')
@@ -158,9 +160,7 @@ def attributes_certification_and_authorities():
         return f"Wrong parameter 'roles'!", 400
     if policies is None or policies == "":
         return f"Wrong parameter 'policies'!", 400
-
     attribute_certifier.generate_attributes(roles, process_id)
-
     policies_hash_file = attribute_certifier.generate_policies(policies, process_id)
     message_bytes = policies_hash_file.encode('ascii')
     base64_bytes = base64.b64encode(message_bytes)
@@ -168,36 +168,30 @@ def attributes_certification_and_authorities():
         'hash1': base64_bytes[:32].decode('utf-8'),
         'hash2': base64_bytes[32:].decode('utf-8')
     }
-    ## file hash da restituire a così chorchain fa le sue cose
-
+    ## file hash da restituire a così ChorChain fa le sue cose
     # Initialization of the authorities through a subprocess in the same console of the API
-    commands = []
+    authority_processes = []
     for i in range(1, numberOfAuthorities + 1):
-        commands.append(f"python3 authority.py -p {process_id} -a {i}")
-    command_string = " & ".join(commands)
-    process = subprocess.Popen(
-        ["bash", "-c", command_string],
-        # Create a new process group
-        preexec_fn=os.setsid  
-    )
-    # Wait until the authorities' initialization is complete (subprocess finishes)
-    process.wait()
-    # Start another subprocess to put on hold the authorities to answer for decryption keys
-    commands = []
+        cmd = f"python3 authority.py -p {process_id} -a {i}"
+        # Use exec to replace the shell so that only the Python process remains
+        p = subprocess.Popen(
+            ["bash", "-c", "exec " + cmd],
+            preexec_fn=os.setsid  # Start a new process group
+        )
+        authority_processes.append(p)
+        processes.append(p)  # Track for cleanup
+    # Wait for all authority processes to finish
+    for p in authority_processes:
+        p.wait()
+    # Launch server_authority.py processes
     for i in range(1, numberOfAuthorities + 1):
-        commands.append(f"python3 server_authority.py -a {i}")
-    # Join the commands with ' & ' to run them in parallel
-    command_string = " & ".join(commands)
-    process = subprocess.Popen(
-        ["bash", "-c", command_string],
-        #Creates a new process group
-        preexec_fn=os.setsid
-    )
-    processes.append(process)
-    end = time.time()
-    total = (end - start) * 10 ** 3
+        cmd = f"python3 server_authority.py -a {i}"
+        p = subprocess.Popen(
+            ["bash", "-c", "exec " + cmd],
+            preexec_fn=os.setsid
+        )
+        processes.append(p)  # Track these as well for cleanup if needed
     #total_without_bc = total - blockchainTime
-    #print("-------time counter------", int(total))
     return jsonify(response_data), 200
 
 

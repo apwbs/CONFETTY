@@ -6,8 +6,6 @@ import block_int
 import ipfshttpclient
 import json
 from maabe_class import *
-from datetime import datetime
-import random
 import sqlite3
 from env_manager import authorities_names_and_addresses
 import time
@@ -21,38 +19,33 @@ def retrieve_data(authority_address, process_instance_id):
             public_key = block_int.retrieve_publicKey_link(authority_address, process_instance_id)
             return authorities, public_parameters, public_key
         except Exception as e:
-            time.sleep(0.5)
+            time.sleep(0.1)
 
 
 # Generate the public parameters of the authorities to perform the encryption
 def generate_pp_pk(process_instance_id):
-    while True:
-        try:
-            api = ipfshttpclient.connect('/ip4/127.0.0.1/tcp/5001')
-            check_authorities = []
-            check_parameters = []
-            conn = sqlite3.connect('../databases/data_owner/data_owner.db')
-            x = conn.cursor()
-            for authority_name, authority_address in authorities_names_and_addresses():
-                data = retrieve_data(authority_address, process_instance_id)
-                check_authorities.append(data[0])
-                check_parameters.append(data[1])
-                pk1 = api.cat(data[2])
-                pk1 = pk1.decode('utf-8').rstrip('"').lstrip('"')
-                pk1 = pk1.encode('utf-8')
-                x.execute("INSERT OR IGNORE INTO authorities_public_keys VALUES (?,?,?,?)",
-                          (str(process_instance_id), f"Auth-{authority_name[4:]}", data[2], pk1))
-                conn.commit()
-            if len(set(check_authorities)) == 1 and len(set(check_parameters)) == 1:
-                getfile = api.cat(check_parameters[0])
-                getfile = getfile.decode('utf-8').rstrip('"').lstrip('"')
-                getfile = getfile.encode('utf-8')
-                x.execute("INSERT OR IGNORE INTO public_parameters VALUES (?,?,?)",
-                          (str(process_instance_id), check_parameters[0], getfile))
-                conn.commit()
-            break
-        except Exception as e:
-                time.sleep(0.5)
+    api = ipfshttpclient.connect('/ip4/127.0.0.1/tcp/5001')
+    check_authorities = []
+    check_parameters = []
+    conn = sqlite3.connect('../databases/data_owner/data_owner.db')
+    x = conn.cursor()
+    for authority_name, authority_address in authorities_names_and_addresses():
+        data = retrieve_data(authority_address, process_instance_id)
+        check_authorities.append(data[0])
+        check_parameters.append(data[1])
+        pk1 = api.cat(data[2])
+        pk1 = pk1.decode('utf-8').rstrip('"').lstrip('"')
+        pk1 = pk1.encode('utf-8')
+        x.execute("INSERT OR IGNORE INTO authorities_public_keys VALUES (?,?,?,?)",
+                    (str(process_instance_id), f"Auth-{authority_name[4:]}", data[2], pk1))
+        conn.commit()
+    if len(set(check_authorities)) == 1 and len(set(check_parameters)) == 1:
+        getfile = api.cat(check_parameters[0])
+        getfile = getfile.decode('utf-8').rstrip('"').lstrip('"')
+        getfile = getfile.encode('utf-8')
+        x.execute("INSERT OR IGNORE INTO public_parameters VALUES (?,?,?)",
+                    (str(process_instance_id), check_parameters[0], getfile))
+        conn.commit()
 
 
 # Check if the data_owner has the public parameters of the authorities to perform the encryption

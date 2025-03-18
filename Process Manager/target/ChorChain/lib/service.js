@@ -71,24 +71,24 @@ angular.module('homePage.services', []).factory('service',
 			}
 
 			service.chorsiaSettings = function(input){
-				return $http.post("http://localhost:8080/settings/", input);
+				return $http.post("http://172.31.83.251:8888/settings/", input);
 			}
 
 			service.subscribe_generateRSA = function(input){
-				return $http.post('http://localhost:8080/certification/generate_rsa_key_pair', input);
+				return $http.post('http://172.31.83.251:8888/certification/generate_rsa_key_pair', input);
 			}
 
 			service.certification = function(input){
 				console.log(input);
-				return $http.post('http://localhost:8080/certification/attributes_certification_and_authorities', input);
+				return $http.post('http://172.31.83.251:8888/certification/attributes_certification_and_authorities', input);
 			}
 
 			service.chorsiaCertification1 = function(input){
-				return $http.post("http://localhost:8080/certification/readpublickey/", input);
+				return $http.post("http://172.31.83.251:8888/certification/readpublickey/", input);
 			}
 
 			service.chorsiaCertification2 = function(input){
-				return $http.post("http://localhost:8080/certification/attributecertification/", input);
+				return $http.post("http://172.31.83.251:8888/certification/attributecertification/", input);
 			}
 
 
@@ -98,7 +98,7 @@ angular.module('homePage.services', []).factory('service',
 			service.sendMessageToMartsia = function(instanceId, messageId, messagePayload){
 				const process_instance_id = 1234567
 				input = {'process_id': process_instance_id}
-				return $http.post("http://127.0.0.1:8888/dataOwner/generate_pp_kk", json = input);
+				return $http.post("http://172.31.83.251:8888/dataOwner/generate_pp_kk", json = input);
 			}
 			service.readMartsiaMessage = function(){
 

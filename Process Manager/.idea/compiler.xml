@@ -9,8 +9,5 @@
         <module name="ChorChain" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ChorChain" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

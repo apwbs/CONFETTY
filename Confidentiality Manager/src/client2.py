@@ -11,8 +11,8 @@ from env_manager import authorities_addresses_and_names_separated
 
 
 # Configure web3 provider for Ganache
-ganache_url = "http://90.147.107.146:7545"
-#ganache_url = "https://sepolia.infura.io/v3/080d5a8adcc244f4a289882d6063723c";
+ganache_url = "http://172.31.80.1:7545"
+#ganache_url = "http://172.31.80.1:7545";
 
 
 web3 = Web3(Web3.HTTPProvider(ganache_url,request_kwargs={'timeout': 600}))
@@ -21,6 +21,7 @@ web3 = Web3(Web3.HTTPProvider(ganache_url,request_kwargs={'timeout': 600}))
 def retrieve_key(transaction):
     # Connection to SQLite3 data_owner database
     conn = sqlite3.connect('../databases/reader/reader.db', timeout=10.0)
+    conn.execute('PRAGMA journal_mode=WAL;')
     x = conn.cursor()
     # Connect to IPFS
     api = ipfshttpclient.connect('/ip4/127.0.0.1/tcp/5001')
@@ -57,7 +58,7 @@ def transactions_monitoring(latest_block):
             block = web3.eth.getBlock(min_round, True)
             for transaction in block.transactions:
                 if transaction['to'] == reader_address and 'input' in transaction and transaction['from'] in list_auth and transaction['from'] not in finished:
-                    #print(f"Key retrieved from {authorities_names[authorities_addresses.index(transaction['from'])]}!")
+                    print(f"Key retrieved from {authorities_names[authorities_addresses.index(transaction['from'])]}!")
                     retrieve_key(transaction)
                     finished.append(transaction['from'])
                     #print(finished)
@@ -71,7 +72,7 @@ def transactions_monitoring(latest_block):
                     first = True
             # Wait for 0.2 second before retrying
             #print("----levare 5: ", 5)
-            time.sleep(5)
+            time.sleep(0.1)
 
 
 

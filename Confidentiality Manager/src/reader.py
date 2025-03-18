@@ -72,7 +72,7 @@ def actual_decryption(remaining, public_parameters, user_sk):
     v2 = groupObj.serialize(v2)
     #print("v2_2:",v2)
     decryptedFile = cryptocode.decrypt(remaining['EncryptedFile'], str(v2))
-    #print("decrypted data:", decryptedFile)
+    print("decrypted data length:", len(decryptedFile))
     return decryptedFile
 
 
@@ -116,7 +116,7 @@ def start(process_instance_id, message_id, slice_id, sender_address):
     #print("dizionario2:", ciphertext_dict['metadata']['message_id'])
     #print("dizionario2 type:", type(ciphertext_dict['metadata']['message_id']))
     #print("messageid",str(message_id))
-    if ciphertext_dict['metadata']['process_instance_id'] == int(process_instance_id) \
-            and ciphertext_dict['metadata']['message_id'] == message_id:
+    if int(ciphertext_dict['metadata']['process_instance_id']) == int(process_instance_id) \
+            and int(ciphertext_dict['metadata']['message_id']) == int(message_id):
         output = actual_decryption(ciphertext_dict['header'][0], public_parameters, user_sk)
         return output

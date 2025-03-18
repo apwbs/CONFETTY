@@ -65,7 +65,7 @@
     // options below to some value.
     //
     // development: {
-    //  host: "192.168.1.3",     // (For Grep) Localhost (default: none)
+    //  host: "172.31.80.1",     // (For Grep) Localhost (default: none)
     //  port: 7545,            // (For Grep) Standard Ethereum port (default: none)
     //  network_id: "*",       // Any network (default: none)
     // },
@@ -90,7 +90,7 @@
     //   skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
     development: {
-      host: "192.168.1.3",     // (For Grep) Localhost (default: none)
+      host: "172.31.80.1",     // (For Grep) Localhost (default: none)
       port: 7545,            // (For Grep) Standard Ethereum port (default: none)
       network_id: 5777,       // (For Grep) Any network (default: none)
     }

@@ -58,8 +58,8 @@ def cipher_generated_key(reader_address, process_instance_id, generated_ma_key):
         start = time.time()
         send_ipfs_link(web3, reader_address, process_instance_id, hash_file)
         end = time.time()
-        total = (end - start) * 10 ** 3
-        #print("----sottrarre send ipfs:", int(total))
+        with open('removing_time_Auth'+ str(authority_number) +'.txt', 'w') as f:
+            f.write(str(start*1000) + " " + str(end*1000) + "\n")
 
 
 def check_block_exists(web3, block_number):
@@ -76,7 +76,7 @@ def check_block_exists(web3, block_number):
         
 
 def transactions_monitoring(web3):
-    compiled_contract_path = '../blockchain/build/contracts/MARTSIAEth.json'
+    compiled_contract_path = '../blockchain/build/contracts/ConfidentialContract.json'
     deployed_contract_address = config('CONTRACT_ADDRESS_MARTSIA')
     with open(compiled_contract_path) as file:
         contract_json = json.load(file)
@@ -92,11 +92,11 @@ def transactions_monitoring(web3):
     while True:
         if not check_block_exists(web3, latest_block):
             if not first:
-                print(f"Waiting for new blocks: Retrying every 1 second... Authority {authority_number}")
+                #print(f"Waiting for new blocks: Retrying every 1 second... Authority {authority_number}")
                 first = True
             # Wait for 1 second before retrying
             #print("----levare 5:", 5)
-            time.sleep(5)
+            time.sleep(0.1)
         else:
             #print("sono qui")
             # Get new events
@@ -131,8 +131,7 @@ if __name__ == "__main__":
     authority_address = config(f'AUTHORITY{authority_number}_ADDRESS')
     authority_private_key = config(f'AUTHORITY{authority_number}_PRIVATEKEY')
     # Configure web3 provider for Ganache
-    ganache_url = "http://90.147.107.146:7545"
-    #ganache_url = "https://sepolia.infura.io/v3/080d5a8adcc244f4a289882d6063723c";
+    ganache_url = "http://172.31.80.1:7545"
 
 
     web3 = Web3(Web3.HTTPProvider(ganache_url,request_kwargs={'timeout': 600}))

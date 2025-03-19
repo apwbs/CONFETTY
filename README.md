@@ -3,7 +3,7 @@
 This repository contains the implementation of the CONFidentiality EnforcemenT TransparencY (CONFETTY) approach submitted at the 23rd International Conference on Business Process Management (BPM 2025), [BPM 25]([https://www.bpm2025seville.org/]).
 
 ## Wiki
-For a detailed documentation and a step-by-step tutorial for configuring and testing this version locally, refer to the [Wiki](https://github.com/apwbs/CONFETTY/wiki).
+For a detailed documentation and a step-by-step tutorial for configuring and testing this version locally, refer to Wiki.pdf or [Wiki](https://github.com/apwbs/CONFETTY/wiki).
 
 ## This repository
 In this repository, you find several folders necessary to run the system:

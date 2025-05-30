@@ -2,7 +2,7 @@
 
 Zenodo DOI: [![DOI](https://zenodo.org/badge/899737599.svg)](https://doi.org/10.5281/zenodo.15482587)
 
-This repository contains the implementation of the CONFidentiality EnforcemenT TransparencY (CONFETTY) approach accepted at the Forum of the 23rd International Conference on Business Process Management ([BPM 2025](https://www.bpm2025seville.org/)).
+This repository contains the implementation of the CONFidentiality EnforcemenT TransparencY (CONFETTY) approach accepted at the Forum Track of the 23rd International Conference on Business Process Management ([BPM 2025](https://www.bpm2025seville.org/)).
 
 CONFETTY is an architecture for blockchain-based Process-Aware Information Systems that preserves the confidentiality of exchanged information while keeping public enforcement and transparency of process execution. In particular, we rely on smart contracts to encode and enforce business process logic while logging the interactions between parties, and we resort to Multi-Authority Attribute-Based Encryption (MA-ABE) to specify the access of different parties to the activities’ data payloads and information artifacts, thus safeguarding confidentiality.
 

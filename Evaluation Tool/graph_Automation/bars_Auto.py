@@ -11,7 +11,7 @@ import os
 sheet_name = "3_SoA_Processes"
 
 file_name = "performance_Analysis.xlsx"
-file_name = "cost_Analysis.xlsx"
+#file_name = "cost_Analysis.xlsx"
 
 # ==========================
 # FORMATTER FUNCTION
@@ -194,7 +194,7 @@ ax.yaxis.set_major_formatter(FuncFormatter(no_scientific))
 ax.grid(axis='y', linestyle='--', alpha=0.7)
 ax.tick_params(axis='x', labelsize=18)
 ax.tick_params(axis='y', labelsize=18)
-ax.legend(title="Phases", loc='upper left', fontsize=16, title_fontsize=18)
+ax.legend(title="Functionalities", loc='upper left', fontsize=16, title_fontsize=18)
 
 plt.tight_layout()
 

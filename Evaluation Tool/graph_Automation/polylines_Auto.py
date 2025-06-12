@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import FuncFormatter
 import os
+from matplotlib.table import Table
 
 # ==========================
 # SHEET AND FILE SELECTION
@@ -17,7 +18,7 @@ sheet_name = "writing_Participants"
 #sheet_name = "exclusive_Split_Join"
 
 file_name = "performance_Analysis.xlsx"
-file_name = "cost_Analysis.xlsx"
+#file_name = "cost_Analysis.xlsx"
 
 # ==========================
 # FORMATTER FUNCTION
@@ -63,7 +64,8 @@ if file_name == "performance_Analysis.xlsx":
     # ======================
     # CASE: performance_Analysis
     # ======================
-
+    val1 = 10
+    val2 = 5
     if sheet_name in ["writing_Participants", "process_Size"]:
         # Process sheets focused on writing_Participants or process_Size cases
         for table_name in sheet.tables:
@@ -74,8 +76,9 @@ if file_name == "performance_Analysis.xlsx":
                 roman = table_name.split("_")[0]
                 x_labels.append(roman_to_int_small(roman))
             elif sheet_name == "process_Size":
-                x_labels.append(table_name.split("_")[1])
-
+                x_labels.append(f'{val1}\n{val2}')
+                val1 += 10
+                val2 += 5
             # Extract header indexes
             header_values = [cell.value for cell in sheet[table.ref][0]]
             avg_index = header_values.index("Average")
@@ -162,7 +165,8 @@ else:
     # ======================
     # CASE: cost_Analysis
     # ======================
-
+    val1 = 10
+    val2 = 5
     for table_name in sheet.tables:
         table = sheet.tables[table_name]
 
@@ -171,7 +175,9 @@ else:
             roman = table_name.split("_")[0]
             x_labels.append(roman_to_int_small(roman))
         elif sheet_name == "process_Size":
-            x_labels.append(table_name.split("_")[1])
+            x_labels.append(f'{val1}\n{val2}')
+            val1 += 10
+            val2 += 5
         elif sheet_name == "message_Size":
             x_labels.append(table_name.split("_")[1])
         elif sheet_name in ["parallel_Split", "exclusive_Split"]:
@@ -253,14 +259,49 @@ for phase in range(cumulative_data.shape[1]):
 # ==========================
 
 ax.set_xticks(x)
-ax.set_xticklabels(x_labels)
+if sheet_name != "process_Size":
+    ax.set_xticklabels(x_labels)
+else:
+    # Split the combined labels into two lists
+    msgs = [lbl.split('\n')[0] for lbl in x_labels]
+    gws  = [lbl.split('\n')[1] for lbl in x_labels]
+    
+    # Blank out the normal ticklabels
+    ax.set_xticklabels([''] * len(x))
+    
+    # Build the 2-row table (no cell borders)
+    tab = Table(ax, bbox=[0, -0.16, 1, 0.14])
+    
+    # — disable auto‐font‐sizing and force 18pt —
+    tab.auto_set_font_size(False)
+    
+    n = len(x_labels)
+    w = 1.0 / n
+    
+    # Fill the grid cells
+    for row_idx, row_data in enumerate([msgs, gws]):
+        for col in range(n):
+            cell = tab.add_cell(row_idx, col, w, 0.5,
+                                text=row_data[col], loc='center')
+            cell.get_text().set_fontsize(18)
+            cell.visible_edges = ''        # hide all borders
+    
+    # Row headers on the left edge
+    for row_idx, label in enumerate(["Messages", "Gateways"]):
+        cell = tab.add_cell(row_idx, -1, 0.1, 0.5, text=label, loc='right')
+        cell.get_text().set_fontsize(18)
+        cell.visible_edges = ''
+    
+    ax.add_table(tab)
+    ax.xaxis.set_tick_params(pad=12)
+
 
 # Set dynamic x-axis label based on the sheet_name
 if sheet_name == "writing_Participants":
     xlabel = 'Number of writing participants'
     file_label = 'Number_Writing_Participants'
 elif sheet_name == "process_Size":
-    xlabel = 'Process size dimension'
+    xlabel = 'Process size'
     file_label = 'Process_Size'
 elif sheet_name == "message_Size":
     xlabel = 'Message size dimension'
@@ -278,8 +319,10 @@ elif sheet_name == "exclusive_Split_Join":
     xlabel = 'Exclusive splits and joins'
     file_label = 'Exclusive_Split_Join'
 
-# Set the X-axis label (human-readable)
+# Set the X-axis label
 ax.set_xlabel(xlabel, fontsize=24)
+if sheet_name == "process_Size": 
+   ax.set_xlabel(xlabel, fontsize=24, labelpad=35) 
 
 # Set Y-axis label depending on the file type
 if file_name == "performance_Analysis.xlsx":
@@ -287,6 +330,7 @@ if file_name == "performance_Analysis.xlsx":
     tick_step = 2_000
     if file_label == 'Process_Size':
         tick_step = 10_000
+        ax.set_ylabel("Cumulative exec. time [ms]", fontsize=24, labelpad=23)
     pdf_prefix = "time"
 else:
     ax.set_ylabel("Cumulative gas used [GU]", fontsize=24)
@@ -326,9 +370,9 @@ ax.yaxis.set_major_formatter(FuncFormatter(no_scientific))
 
 # Add grid, legend, and apply layout adjustments
 ax.grid(axis='y', linestyle='--', alpha=0.7)
-ax.tick_params(axis='x', labelsize=18)  # X-axis tick label size
+ax.tick_params(axis='x', labelsize=18, rotation=0)  # X-axis tick label size
 ax.tick_params(axis='y', labelsize=18)  # Y-axis tick label size
-ax.legend(title="Phases", loc='upper left', fontsize=16, title_fontsize=18)
+ax.legend(title="Functionalities", loc='upper left', fontsize=16, title_fontsize=18)
 
 plt.tight_layout()
 
@@ -339,7 +383,7 @@ plt.tight_layout()
 # Construct the filename using the prefix and file_label
 pdf_filename = f"{pdf_prefix}_{file_label}.pdf"
 
-# Optional: Choose a folder path to save the PDF
+# Choose a folder path to save the PDF
 output_folder = "pdf_Outputs"
 os.makedirs(output_folder, exist_ok=True)
 
@@ -351,5 +395,5 @@ plt.savefig(pdf_path, format='pdf')
 
 print(f"Figure saved as: {pdf_path}")
 
-# Show plot (optional)
+# Show plot
 plt.show()

@@ -131,21 +131,21 @@ def main():
         authority_number = args.authority
         authority = Authority(authority_number)
         # 0.1
-        #print(f"Phase 0.1 Authority {authority_number}")
+        print(f"Phase 0.1 Authority {authority_number}")
         authority.save_authorities_names(api, process_instance_id)
         # 0.2
-        #print(f"Phase 0.2 Authority {authority_number}")
+        print(f"Phase 0.2 Authority {authority_number}")
         authority.initial_parameters_hashed(groupObj, process_instance_id)
         # 0.3
-        #print(f"Phase 0.3 Authority {authority_number}")
+        print(f"Phase 0.3 Authority {authority_number}")
         authority.initial_parameters(process_instance_id)
         # 0.4
-        #print(f"Phase 0.4 Authority {authority_number}")
+        print(f"Phase 0.4 Authority {authority_number}")
         while not authority.generate_public_parameters(groupObj, maabe, api, process_instance_id):
             time.sleep(0.1)
             #print("---sottrarre sleep:", int(1 * 10 ** 3))
         # 0.5
-        #print(f"Phase 0.5 Authority {authority_number}")
+        print(f"Phase 0.5 Authority {authority_number}")
         authority.generate_pk_sk(groupObj, maabe, api, process_instance_id)
 
 if __name__ == '__main__':

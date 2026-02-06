@@ -173,27 +173,31 @@ def attributes_certification_and_authorities():
     authority_processes = []
     for i in range(1, numberOfAuthorities + 1):
         cmd = f"python3 authority.py -p {process_id} -a {i}"
-        # Use exec to replace the shell so that only the Python process remains
         p = subprocess.Popen(
-            ["bash", "-c", "exec " + cmd],
-            preexec_fn=os.setsid  # Start a new process group
-        )
+        	["bash", "-c", "exec " + cmd],
+        	stdout=sys.stdout,        # <---- forward output to Flask console
+        	stderr=sys.stderr,
+        	preexec_fn=os.setsid
+    	)
         authority_processes.append(p)
-        processes.append(p)  # Track for cleanup
-    # Wait for all authority processes to finish
+        processes.append(p)
+
+    # Wait for authority processes
     for p in authority_processes:
         p.wait()
-    # Launch server_authority.py processes
+
+    # Start server_authority.py processes
     for i in range(1, numberOfAuthorities + 1):
         cmd = f"python3 server_authority.py -a {i}"
         p = subprocess.Popen(
-            ["bash", "-c", "exec " + cmd],
-            preexec_fn=os.setsid
-        )
-        processes.append(p)  # Track these as well for cleanup if needed
-    #total_without_bc = total - blockchainTime
-    return jsonify(response_data), 200
+        	["bash", "-c", "exec " + cmd],
+        	stdout=sys.stdout,        # <---- forward output to Flask console
+        	stderr=sys.stderr,
+        	preexec_fn=os.setsid
+    	)
+        processes.append(p)
 
+    return jsonify(response_data), 200
 
 @app.route('/encrypt/', methods=['POST'], strict_slashes=False)
 def encrypt():

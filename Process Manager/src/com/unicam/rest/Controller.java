@@ -65,10 +65,10 @@ public class Controller {
 		String redirect = " ";
 		String os = System.getProperty("os.name").toLowerCase();
 		if (a == 1){//os.contains("win") || os.contains("osx")){
-			redirect="http://virtualpros.unicam.it:8080/ChorChain/homePage.html";
-			//redirect= "http://localhost:8080/ChorChain_war_exploded/homePage.html";
+			redirect="http://virtualpros.unicam.it:8081/ChorChain/homePage.html";
+			//redirect= "http://localhost:8081/ChorChain_war_exploded/homePage.html";
 		} else if (a==2){//os.contains("nix") || os.contains("aix") || os.contains("nux")){
-			redirect="http://virtualpros.unicam.it:8080/ChorChain/homePage.html";
+			redirect="http://virtualpros.unicam.it:8081/ChorChain/homePage.html";
 		}else if (a==3){//os.contains("nix") || os.contains("aix") || os.contains("nux")){
 			redirect="http://localhost:8081/ChorChain/homePage.html";
 		}

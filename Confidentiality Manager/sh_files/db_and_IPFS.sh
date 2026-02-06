@@ -1,7 +1,6 @@
 #!/bin/bash
 # Go to the directory where the databases are stored
 cd ../databases
-
 # Create attribute_certifier database
 cd attribute_certifier
 if [ -e "attribute_certifier.db" ]; then

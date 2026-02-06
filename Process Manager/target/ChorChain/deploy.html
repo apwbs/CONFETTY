@@ -556,8 +556,8 @@
                     }
                 }
                 //$scope.stateAbi = JSON.parse();
-                $scope.stateContract = new web3.eth.Contract($scope.stateAbi, "0xd266b9Cf9dF90128c6E180A543A09d0F67D49D42");
-                //$scope.stateContract = new web3.eth.Contract($scope.stateAbi, "0x10fB8d358C32a8AE6F884B8277154063942DCe9e");
+                $scope.stateContract = new web3.eth.Contract($scope.stateAbi, "0x253426Df89B140169f39f584A452dC333553387A");
+                //$scope.stateContract = new web3.eth.Contract($scope.stateAbi, "0x253426Df89B140169f39f584A452dC333553387A");
                 $scope.msgs = [{}];
                 const taskIdAndMartsiaId = JSON.parse($cookies.get('taskIdAndMartsiaId'))
                 for (const msg in taskIdAndMartsiaId) {
@@ -804,7 +804,7 @@
                 $window.addEventListener("load", function () {
                     if (typeof web3 !== "undefined") {
                         web3 = new Web3(web3.currentProvider);
-                        $scope.martsiaContract = new web3.eth.Contract($scope.martsiaAbi, "0xb4b1F31C51F70B1A76EE0e8d300ECbc75d0ceaa4");
+                        $scope.martsiaContract = new web3.eth.Contract($scope.martsiaAbi, "0x9D858c4AC0FFd095Dca652e2032143C08967a723");
 
                         //console.log(web3);
                         //web3.eth.getAccounts().then(console.log);
@@ -940,7 +940,7 @@
                     'chain': "DEV"
                 };
 
-                const postPk = await $http.post("http://localhost:8080/settings/", json = input);
+                const postPk = await $http.post("http://localhost:8888/settings/", json = input);
                 console.log(postPk);
             }*/
 
@@ -964,7 +964,7 @@
                 console.log("1. generate pp pk " + $scope.actualInstance.martsiaId);
                 console.log("1. generate pp pk " + requesterRole);
                 console.log(input);
-                const postPk = await $http.post("http://localhost:8080/dataOwner/generate_pp_pk/", json = input);
+                const postPk = await $http.post("http://localhost:8888/dataOwner/generate_pp_pk/", json = input);
                 console.log(postPk);
             }*/
 
@@ -1027,7 +1027,7 @@
                     'message_id': msg.martsiaId
                 }
 
-                const postCipher = await $http.post("http://localhost:8080//encrypt/", json = input);
+                const postCipher = await $http.post("http://localhost:8888/encrypt/", json = input);
                 let martsiaContractInputs = [];
 
                 martsiaContractInputs[0] = web3.utils.asciiToHex(postCipher.data.data[0].replace("b'", "").replace("'", ""));
@@ -1054,7 +1054,7 @@
                     'fromBlock': 0
                 }
                 console.log(input);
-                const postCipher = await $http.post("http://localhost:8080/getkey/askkey/", json = input);
+                const postCipher = await $http.post("http://localhost:8888/getkey/askkey/", json = input);
                 console.log(postCipher);
 
                 let martsiaContractInputs = [];
@@ -1072,7 +1072,7 @@
                     console.log(receipt);
                 });
 
-                const listenKey = await $http.post("http://localhost:8080/getkey/listen", json = input);
+                const listenKey = await $http.post("http://localhost:8888/getkey/listen", json = input);
                 console.log(listenKey);
             }*/
 
@@ -1091,7 +1091,7 @@
                     'actor': $scope.user.address
                 }
 
-                const decryptCheck = await $http.post("http://localhost:8080/decrypt_check", json = input);
+                const decryptCheck = await $http.post("http://localhost:8888/decrypt_check", json = input);
                 console.log(decryptCheck);
                 if(decryptCheck.status===200){
                     await $scope.martsiaContract.methods.notifyAuthorities($scope.actualInstance.martsiaId,
@@ -1107,7 +1107,7 @@
                         'list_auth': decryptCheck.data.authorities_list,
                         'starting_block': await web3.eth.getBlockNumber()
                     }
-                    const decryptWait = await $http.post("http://localhost:8080/decrypt_wait", json = input2);
+                    const decryptWait = await $http.post("http://localhost:8888/decrypt_wait", json = input2);
                     console.log(decryptWait.data);
                     console.log(atob(decryptWait.data));
                 }else if(decryptCheck.status===202){

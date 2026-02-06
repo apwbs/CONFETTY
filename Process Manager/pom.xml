@@ -30,7 +30,7 @@
 				<version>3.2.2</version>
 				<configuration>
 					<warSourceDirectory>WebContent</warSourceDirectory>
-					<outputDirectory>C:/Users/alkit/apache-tomcat-9.0.26/webapps/</outputDirectory>
+					<outputDirectory>/temp/apache-tomcat-9.0.112/webapps</outputDirectory>
 					 <failOnMissingWebXml>false</failOnMissingWebXml>
 					
 				</configuration>

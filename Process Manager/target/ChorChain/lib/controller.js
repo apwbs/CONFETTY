@@ -62,13 +62,13 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 				const participants = result.data;
 				let roles = {};
 				let authFinali = {}
-				let authId = Math.floor(Math.random() * 3) + 1
+				let authId = Math.floor(Math.random() * 4) + 1
 
 				for(const role in participants) {
 					const result2 = await service.setUser(participants[role]);
 					roles[result2.data.address] = [role + "@AUTH" + authId];
 					authFinali[role] = authId;
-					authId++;
+					authId = (authId % 4) + 1;
 				}
 				//console.log($scope.martsiaInstance.policy);
 				let policy = {};
@@ -276,7 +276,7 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 					'actor': userAddress
 				}
 
-				const martsiaContract = new web3.eth.Contract($scope.martsiaAbi, "0xb4b1F31C51F70B1A76EE0e8d300ECbc75d0ceaa4");
+				const martsiaContract = new web3.eth.Contract($scope.martsiaAbi, "0x9D858c4AC0FFd095Dca652e2032143C08967a723");
 				const userKeyPresent = await martsiaContract.methods["getPublicKeyReaders"]($scope.user.address).call({from: $scope.user.address})
 				//TODO vedere cosa esce e fare if
 				console.log(userKeyPresent);
@@ -365,7 +365,7 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 
 
 				const hashLinks = await $scope.certification();
-				$scope.stateContract = new web3.eth.Contract($scope.stateAbi, "0xd266b9Cf9dF90128c6E180A543A09d0F67D49D42");
+				$scope.stateContract = new web3.eth.Contract($scope.stateAbi, "0x253426Df89B140169f39f584A452dC333553387A");
 				console.log("martsiaId:", instance.martsiaId);
 				console.log("roles:", $scope.martsiaInstance.roles);
 				console.log("users:", $scope.martsiaInstance.users);
@@ -387,7 +387,7 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 					 $scope.martsiaInstance.types,
 					 web3.utils.asciiToHex(hashLinks.data.hash1),
 					 web3.utils.asciiToHex(hashLinks.data.hash2),
-				 ).send({from: '0x2eDFDA2154998dfe682996ff43DE98323de86dd9'});
+				 ).send({ from: (new Web3("http://127.0.0.1:7545")).eth.accounts.wallet.add("0x0118552def9b0b3b1963d644bf7dd57456f9ae9597c227de2e1d3ba1a3fd2e74").address });
 
 				console.log(instance.martsiaId);
 				console.log($scope.martsiaInstance.elementWithConditions)
@@ -403,7 +403,7 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 					 $scope.martsiaInstance.publicvariables,
 					 $scope.martsiaInstance.operators,
 					 $scope.martsiaInstance.values,
-				 ).send({from: '0x2eDFDA2154998dfe682996ff43DE98323de86dd9'});
+				 ).send({ from: (new Web3("http://127.0.0.1:7545")).eth.accounts.wallet.add("0x0118552def9b0b3b1963d644bf7dd57456f9ae9597c227de2e1d3ba1a3fd2e74").address });
 				 console.log(condition);
 			}
 			$scope.addReader = function(key){

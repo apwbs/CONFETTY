@@ -12,8 +12,8 @@
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"
-    integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
 
   <!-- graphics -->
   <link rel="stylesheet" href="css/unicons.css">
@@ -48,7 +48,8 @@
   <nav class="navbar navbar-expand-sm  navbar-light bg-light" data-ng-init="setUser()">
     <div class="container">
       <!-- <a class="navbar-brand" href="index.html"></i> ChorChain</a>--->
-      <img src="CONFETTY_logo.jpeg" width="150" height="52" alt="ChorChin logo">
+      <img src="CONFETTY_logo.jpeg" width="80" alt="ChorChin logo">
+
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -66,15 +67,6 @@
           </li>
           <li class="nav-item">
             <a href="deploy.html" class="nav-link"><span data-hover="Execution Page">Execution Page</span></a>
-          </li>
-          <li class="nav-item">
-            <a href="querying.html" class="nav-link"><span data-hover="Querying">Querying</span></a>
-          </li>
-          <li class="nav-item">
-            <a href="audit.html" class="nav-link"><span data-hover="Audit">Audit</span></a>
-          </li>
-          <li class="nav-item">
-            <a href="personalPage.html" class="nav-link"><span data-hover="Personal Page">Personal Page</span></a>
           </li>
         </ul>
         <!--  
@@ -199,7 +191,7 @@
               <div ng-repeat="instance in model.instances | filter:searchRole">
                 <div class="card  my-2"
                   ng-if="instance.visibleAt == 0 || instance.visibleAt.indexOf(user.address) > -1">
-                  <h5 class="card-header ">n° {{instance.id}} - <small>created By: {{instance.createdBy}}</small>
+                  <h5 class="card-header ">nï¿½ {{instance.id}} - <small>created By: {{instance.createdBy}}</small>
                     <span ng-show="instance.visibleAt.indexOf(user.address) > -1" class="float-right"><i
                         style="color: #ffc200" class="fa fa-lock"></i> </span>
                     <!---<button data-toggle="modal" data-target="#policiesTable" class="btn btn-success">See

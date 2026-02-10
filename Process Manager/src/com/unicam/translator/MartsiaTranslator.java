@@ -139,14 +139,23 @@ public class MartsiaTranslator {
 
         List<Integer> elementWithPublicVar = new ArrayList<>();
         System.out.println("publicvariables: " + choreography.publicvariables);
-        for (Map.Entry<String, Integer> elementId : choreography.gatewayGuards.entrySet()){
+        /*for (Map.Entry<String, Integer> elementId : choreography.gatewayGuards.entrySet()){
             System.out.println("Elemento con var pubblica: " + elementId.getKey());
             System.out.println("Elemento con var pubblica: " + elementId.getValue());
             if(choreography.publicvariables.contains(elementId.getKey())){
                 System.out.println("Elemento con var pubblica: " + elementId.getValue());
                 elementWithPublicVar.add(elementId.getValue());
             }
+        }*/
+        for (String publicVar : choreography.publicvariables){
+            System.out.println("Var pubblica: " + publicVar);
+            if(choreography.gatewayGuards.containsKey(publicVar)){
+                System.out.println("Aggiungo : " + choreography.gatewayGuards.get(publicVar));
+                elementWithPublicVar.add(choreography.gatewayGuards.get(publicVar));
+            }
         }
+
+
         //for each element having a condition extracts its numeric id
         LinkedList<Integer> elementsWithConditions = new LinkedList<>();
         for(String elementId : choreography.elementWithConditions){
@@ -497,6 +506,9 @@ public class MartsiaTranslator {
                 gatewayGuards.put(param, elementId);
             }
         }else{
+            System.out.println("sto aggiungendo: " + elementId);
+            System.out.println("e anche: " + name);
+
             gatewayGuards.put(name, elementId);
         }
 

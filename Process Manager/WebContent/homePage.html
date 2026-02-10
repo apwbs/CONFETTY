@@ -212,7 +212,7 @@
 													</button>-->
                     <button ng-if="instance.actualNumber == instance.maxNumber" data-toggle="modal" data-target="#policiesTable" class="btn btn-success"
                             ng-click="generateMartsiaInstance(model, instance.id, instance.martsiaId, instance)">
-					      Complete instance {{instance.martsiaId}}
+					      Complete instance
                     </button>
 
                     <!---<div ng-if="instance.actualNumber == instance.maxNumber && instance.done==false"
@@ -328,7 +328,7 @@
           <!---<button ng-click="setPolicies()" class="btn custom-btn-yellow my-2"
                   data-dismiss="modal">Set policies</button>--->
           <button ng-click="readPolicies(model, instance)" class="btn custom-btn-yellow my-2" data-dismiss="modal">
-            Complete instance {{instance.martsiaId}}
+            Instantiate on-chain <!--{{instance.martsiaId}}-->
           </button>
         </div>
       </div>

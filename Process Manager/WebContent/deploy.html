@@ -169,7 +169,7 @@
                                             <div class="form-group">
                                                 <input type="text" ng-show="msg.status == 'toSend'" class="form-control" placeholder="Insert message payload" ng-model="param">
                                             </div>
-                                            <span ng-if="msg.status == 'toSend'">
+                                            <span ng-show="msg.status == 'toSend'">
                                                 <input type="checkbox" ng-model="publicVarCheckbox"> Public payload
                                             </span>                                            
                                             <input type="submit" ng-if="msg.status == 'toSend'" class="btn btn-primary" value="Send message" ng-click="cipherMessage(param, msg, publicVarCheckbox)" id="cipherMessage">
@@ -320,7 +320,7 @@
             $scope.currentRole = "";
             $scope.activeSid = "";
             $scope.transactionHistory = [{}];
-            $scope.msgToShow = {}
+            $scope.msgToShow = []
             $scope.transactionToShow = [{hash: "", from: "", gas: "", gasPrice: "", time: "", blockNumber: "", sid: ""}];
             $scope.actualSid = "";
             $scope.totalGas = [];
@@ -949,7 +949,11 @@
                 let publicVarNames = []
                 let publicValues = []
                 if(public){
+                    
                     console.log("sto mettendo public")
+                    console.log(public)
+                    console.log(msg.name)
+                    console.log(inputValue)
                     publicVarNames.push(web3.utils.asciiToHex(msg.name))
                     publicValues.push(web3.utils.asciiToHex(inputValue))
                 }
@@ -965,21 +969,17 @@
 
                 const postCipher = await $http.post("http://localhost:8888/encrypt/", json = input);
                 let martsiaContractInputs = [];
-                //console.log(postCipher)
-
                 martsiaContractInputs[0] = web3.utils.asciiToHex(postCipher.data.data[0].replace("b'", "").replace("'", ""));
                 martsiaContractInputs[1] = web3.utils.asciiToHex(postCipher.data.data[1].replace("b'", "").replace("'", ""));
-                //console.log(martsiaContractInputs[0])
-                //console.log(martsiaContractInputs[1])
-
+ 
                 const martsiaContractMethod = postCipher.data.method;
-                //console.log(martsiaContractMethod);
                 await $scope.martsiaContract.methods[martsiaContractMethod]($scope.actualInstance.martsiaId, msg.martsiaId,
                     martsiaContractInputs[0], martsiaContractInputs[1], publicVarNames, publicValues).send({
                     from: $scope.user.address
                 }).then(function (receipt) {
                     //console.log(receipt);
                 });
+        
 
             }
 
@@ -1050,14 +1050,15 @@
                     const decryptWait = await $http.post("http://localhost:8888/decrypt_wait", json = input2);
                     console.log(decryptWait.data);
                     console.log(atob(decryptWait.data));
-                    
+                    const msgToSh = {value: atob(decryptWait.data)}
                     $scope.$apply(function (receipt) {
-                        $scope.msgToShow = {value: atob(decryptWait.data)};
+                        $scope.msgToShow.push(msgToSh);
                     })
                 }else if(decryptCheck.status===202){
                     console.log(atob(decryptCheck.data));
+                    const msgToSh = {value: atob(decryptCheck.data)};
                     $scope.$apply(function (receipt) {
-                        $scope.msgToShow = {value: atob(decryptCheck.data)};
+                        $scope.msgToShow.push(msgToSh);
                     })
                    
                 }

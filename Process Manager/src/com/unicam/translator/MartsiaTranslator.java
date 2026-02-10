@@ -138,7 +138,10 @@ public class MartsiaTranslator {
         }
 
         List<Integer> elementWithPublicVar = new ArrayList<>();
+        System.out.println("publicvariables: " + choreography.publicvariables);
         for (Map.Entry<String, Integer> elementId : choreography.gatewayGuards.entrySet()){
+            System.out.println("Elemento con var pubblica: " + elementId.getKey());
+            System.out.println("Elemento con var pubblica: " + elementId.getValue());
             if(choreography.publicvariables.contains(elementId.getKey())){
                 System.out.println("Elemento con var pubblica: " + elementId.getValue());
                 elementWithPublicVar.add(elementId.getValue());
@@ -153,13 +156,15 @@ public class MartsiaTranslator {
         //convert public variables name to hex
         LinkedList<String> publicVariables = new LinkedList<>();
         for(String publicVar : choreography.publicvariables){
-            System.out.println("Variabile pubblica da controllare: " + publicVar.getBytes());
+            System.out.println("Variabile pubblica da controllare bytes: " + publicVar.getBytes());
+            System.out.println("Variabile pubblica da controllare: string " + publicVar);
             publicVariables.add(Numeric.toHexString(publicVar.getBytes()));
         }
         //convert values of a gateway condition to hex
         LinkedList<String> gatewayValues = new LinkedList<>();
         for(String value : choreography.values){
-            System.out.println("Valore concreto da controllare: " + value.getBytes());
+            System.out.println("Valore concreto da controllare bytes: " + value.getBytes());
+            System.out.println("Valore concreto da controllare string: " + value);
             gatewayValues.add(Numeric.toHexString(value.getBytes()));
         }
         MartsiaInstance m = new MartsiaInstance(roles, users, elements, _nextElements, _previousElements, types,
@@ -510,22 +515,22 @@ public class MartsiaTranslator {
     //contains the value of the condition
     private void createCondition(String guard, String elementWithCondition){
         if(guard.contains("==")){
-            operators.add(0);
+            operators.add(1);
             publicvariables.add(guard.split("==")[0]);
             values.add(guard.split("==")[1]);
             //System.out.println("There is a guard value == " + guard.split("==")[1]);
         } else if(guard.contains("!=")){
-            operators.add(1);
+            operators.add(2);
             publicvariables.add(guard.split("!=")[0]);
             values.add(guard.split("!=")[1]);
             // System.out.println("There is a guard value == " + guard.split("==")[1]);
         } else if(guard.contains(">")){
-            operators.add(2);
+            operators.add(3);
             publicvariables.add(guard.split(">")[0]);
             values.add(guard.split(">")[1]);
             // System.out.println("There is a guard value == " + guard.split("==")[1]);
         } else if(guard.contains("<")){
-            operators.add(3);
+            operators.add(4);
             publicvariables.add(guard.split("<")[0]);
             values.add(guard.split("<")[1]);
             //System.out.println("There is a guard value == " + guard.split("==")[1]);

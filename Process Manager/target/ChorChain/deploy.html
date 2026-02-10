@@ -167,11 +167,12 @@
                                         Message: {{msg.name}}
                                         <form class="mt-3">
                                             <div class="form-group">
-                                                <input type="text" ng-if="msg.status == 'toSend'" class="form-control" placeholder="Insert message payload" ng-model="param">
+                                                <input type="text" ng-show="msg.status == 'toSend'" class="form-control" placeholder="Insert message payload" ng-model="param">
                                             </div>
                                             <span ng-if="msg.status == 'toSend'">
                                                 <input type="checkbox" ng-model="publicVarCheckbox"> Public payload
-                                            </span>                                            <input type="submit" ng-if="msg.status == 'toSend'" class="btn btn-primary" value="Send message" ng-click="cipherMessage(param, msg, publicVarCheckbox)" id="cipherMessage">
+                                            </span>                                            
+                                            <input type="submit" ng-if="msg.status == 'toSend'" class="btn btn-primary" value="Send message" ng-click="cipherMessage(param, msg, publicVarCheckbox)" id="cipherMessage">
                                             <input type="submit" ng-if="msg.status == 'sent'" class="btn btn-primary" value="Read message" ng-click="read(msg)" id="read">
                                         </form>
                                         <div ng-if="msg.show==1 && actualContract.participants[currentRole] != user.id">
@@ -498,9 +499,9 @@
                         $scope.actualContract.name = $scope.instances[i].name;
                         //$scope.tasks = $scope.actualContract.taskIdAndName;
                         //$scope.valueNames = $scope.actualContract.varNames;
-                        console.log($scope.actualContract);
+                        //console.log($scope.actualContract);
                         martsiaId = $scope.instances[i].martsiaId;
-                        console.log(martsiaId);
+                        //console.log(martsiaId);
                         // $scope.process_instance_id = $scope.actualContract.id;
                         //$scope.msgs = $scope.actualContract.taskIdAndName;
                         break;
@@ -516,10 +517,10 @@
                     2: "sent"
                 };
                 for (const msg in taskIdAndMartsiaId) {
-                    console.log(msg);
-                    console.log($scope.actualContract);
+                    //console.log(msg);
+                    //console.log($scope.actualContract);
                     const m = await $scope.stateContract.methods.getInstanceElement(martsiaId, taskIdAndMartsiaId[msg]).call()
-                    console.log(m)
+                    //console.log(m)
                     if (m.state == 1 || m.state == 2) {
                         highlightmsg(msg);
                     }
@@ -532,7 +533,7 @@
                         role: $scope.actualContract.taskIdAndRole[msg]
                     };
 
-                    console.log(element)
+                    //console.log(element)
                     $scope.$apply(function (receipt) {
 
                         $scope.msgs.push(element);
@@ -562,7 +563,7 @@
                     $scope.isLogged = true;
                     $http.post("rest/getUserInfo/" + $cookies.get('UserId')).then(function (response) {
                         $scope.user = response.data;
-                        console.log($scope.user)
+                        //console.log($scope.user)
                     });
                 } else {
                     $scope.isLogged = false;
@@ -959,25 +960,25 @@
                     'message': btoa(inputValue),
                     'message_id': msg.martsiaId
                 }
-
+                console.log("MESSAGE INPUT")
                 console.log(input)
 
                 const postCipher = await $http.post("http://localhost:8888/encrypt/", json = input);
                 let martsiaContractInputs = [];
-                console.log(postCipher)
+                //console.log(postCipher)
 
                 martsiaContractInputs[0] = web3.utils.asciiToHex(postCipher.data.data[0].replace("b'", "").replace("'", ""));
                 martsiaContractInputs[1] = web3.utils.asciiToHex(postCipher.data.data[1].replace("b'", "").replace("'", ""));
-                console.log(martsiaContractInputs[0])
-                console.log(martsiaContractInputs[1])
+                //console.log(martsiaContractInputs[0])
+                //console.log(martsiaContractInputs[1])
 
                 const martsiaContractMethod = postCipher.data.method;
-                console.log(martsiaContractMethod);
+                //console.log(martsiaContractMethod);
                 await $scope.martsiaContract.methods[martsiaContractMethod]($scope.actualInstance.martsiaId, msg.martsiaId,
                     martsiaContractInputs[0], martsiaContractInputs[1], publicVarNames, publicValues).send({
                     from: $scope.user.address
                 }).then(function (receipt) {
-                    console.log(receipt);
+                    //console.log(receipt);
                 });
 
             }
@@ -1045,7 +1046,7 @@
                         'list_auth': decryptCheck.data.authorities_list,
                         'starting_block': await web3.eth.getBlockNumber()
                     }
-                    console.log(input2)
+                    //console.log(input2)
                     const decryptWait = await $http.post("http://localhost:8888/decrypt_wait", json = input2);
                     console.log(decryptWait.data);
                     console.log(atob(decryptWait.data));
@@ -1068,7 +1069,7 @@
                     name: "a martsia param name",
                     value: "a martsia param value"
                 }];
-                console.log($scope.msgToShow);
+                //console.log($scope.msgToShow);
                 //process id, reader address, gid
                 //reader process id, message id, slice id, gid, key generate
                 /*service.readMartsiaMessage(...).then(function (response) {

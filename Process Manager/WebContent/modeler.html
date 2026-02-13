@@ -67,7 +67,7 @@
 	<nav class="navbar navbar-expand-sm  navbar-light bg-light" data-ng-init="setUser()">
 		<div class="container">
 			 <!-- <a class="navbar-brand" href="index.html"></i> ChorChain</a>--->
-      	<img src="CONFETTY_logo.jpeg" width="80" alt="ChorChin logo">
+      	<img src="CONFETTY_logo.png" width="60" alt="ChorChin logo">
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -284,7 +284,18 @@ var payCount = 0;
 	}*/
 	
 	function saveModel() {
-
+		console.log(document.cookie);
+		let userId;
+		 const cookies = document.cookie.split("; ");
+		for (let c of cookies) {
+			const parts = c.split("=");
+			const key = parts.shift();
+			const value = parts.join("=");
+			if (key === "UserId") {
+				userId = value;
+			}
+		}
+  console.log(userId)
 		var specialCharacters = /^[a-zA-Z]*$/;
 		Swal.fire({
 			title: "Insert the new model name",

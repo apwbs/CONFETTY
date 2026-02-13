@@ -121,6 +121,7 @@ function saveDiagram(done) {
 	});
   
   (0, _jquery2.default)('#js-new-diagram').click(function(e) {
+      console.log(document.cookie)
 	    var rawFile = new XMLHttpRequest();
 	    rawFile.open("GET", "rest/requestNewXml", false);
 	    rawFile.onreadystatechange = function ()
@@ -144,8 +145,19 @@ function saveDiagram(done) {
 				fileXml = xml;
 			  });
 		var rawFile = new XMLHttpRequest();
-		var cook = document.cookie.split("=");
-		rawFile.open("POST", "rest/saveModel/"+ e.currentTarget.dataset.value + "/" + cook[1], false);
+		//var cook = document.cookie.split("=");
+    
+    let userId;
+		 const cookies = document.cookie.split("; ");
+		for (let c of cookies) {
+			const parts = c.split("=");
+			const key = parts.shift();
+			const value = parts.join("=");
+			if (key === "UserId") {
+				userId = value;
+			}
+		}
+		rawFile.open("POST", "rest/saveModel/"+ e.currentTarget.dataset.value + "/" + userId, false);
       console.log(rawFile);
       rawFile.send(fileXml);
 	});

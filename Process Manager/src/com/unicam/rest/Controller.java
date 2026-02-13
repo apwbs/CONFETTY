@@ -532,9 +532,11 @@ public class Controller {
 			getRoles.getParticipants();
 			List<String> roles = OLD_Choreography.participantsWithoutDuplicates;
 			Model modelUploaded = new Model(filename, loggedUser.getAddress(), roles, new ArrayList<Instance>());
+			
 			em.persist(modelUploaded);
 			tm.commit();
 		}catch(Exception e) {
+
 			e.printStackTrace();
 			tm.rollback();
 		}finally {

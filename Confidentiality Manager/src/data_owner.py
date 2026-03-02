@@ -120,6 +120,7 @@ def encrypt_data(sender_address, file_to_encrypt, message_id, process_instance_i
                 'message_id': message_id}
     json_total = {'metadata': metadata, 'header': header}
     hash_file = api.add_json(json_total)
+    print('HASH IPFS----------------------------': hash_file)
     x.execute("INSERT OR IGNORE INTO messages VALUES (?,?,?,?)",
               (str(process_instance_id), str(message_id), hash_file, str(json_total)))
     conn.commit()

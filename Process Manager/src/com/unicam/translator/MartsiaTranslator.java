@@ -112,6 +112,7 @@ public class MartsiaTranslator {
         choreography.getParticipants();
         choreography.FlowNodeSearch(optionalRoles, mandatoryRoles);
         existingContractObject.setTaskIdAndMartsiaId(choreography.taskIdAndMartsiaId);
+        existingContractObject.setPolicy(choreography.policy);
         List<String> roles = new ArrayList<>();
         List<String> users = new ArrayList<>();
         List<Integer> elements = new ArrayList<>();

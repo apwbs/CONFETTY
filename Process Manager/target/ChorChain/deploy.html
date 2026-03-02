@@ -130,7 +130,7 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body" ng-cloak>
-                        <h6>Model File List</h6>
+                        <h6>Instances</h6>
                         <ul class="list-group models-list">
                             <li class="list-group-item" ng-repeat="contract in instances.slice().reverse() track by $index">
                                 <!--<a ng-click="getContractParticipants(contract.id); getTask(contract.id); sub(contract.id); savePastEvents()"-->
@@ -154,29 +154,44 @@
                         </div>
                         <div class="row">
                             <div class="col-9" ng-cloak>
-                                <div class="slidecontainer">
+                                <!--<div class="slidecontainer">
                                     <input class="slider" id="transactionSlider" type="range" class="no-border"
                                            value="0" min="0" max="0"/>
-                                </div>
+                                </div>-->
                                 <button type="button" style="display: none" id="js-preview"
                                         data-value="{{actualContract.name}}"></button>
                                 <ul class="list-group">
-                                    <li class="list-group-item my-2" ng-repeat="msg in msgs" ng-if="(msg.status == 'toSend' || msg.status == 'sent') && msg.role != 'internal'">
+                                    {{actualInstance.deployedContract.taskIdAndMartsiaId[msg.chorChainId]}}
+                                    {{user.id}}
+                                    <li class="list-group-item my-2" ng-repeat="msg in msgs" ng-if="((msg.status == 'toSend' && msg.participant == user.id) ||  
+                                    (msg.status == 'sent' && msg.reader == user.id)) && 
+                                    msg.role != 'internal'">
                                         <div class="float-right">Status: {{msg.status}}
                                         </div>
                                         Message: {{msg.name}}
                                         <form class="mt-3">
                                             <div class="form-group">
-                                                <input type="text" ng-show="msg.status == 'toSend'" class="form-control" placeholder="Insert message payload" ng-model="param">
+                                            <textarea ng-show="msg.status == 'toSend'"
+                                                    class="form-control"
+                                                    placeholder="Insert message data"
+                                                    ng-model="param"
+                                                    rows="4"
+                                                    style="resize: vertical;">
+                                            </textarea>         
+                                            <input type="file"
+                                                ng-show="msg.status == 'toSend'"
+                                                class="form-control"
+                                                onchange="angular.element(this).scope().setFile(this.files)">
                                             </div>
+                                                                                      
+                                            <input type="submit" ng-if="msg.status == 'toSend'" class="btn btn-primary" value="Send message" ng-click="cipherMessage(param, msg, publicVarCheckbox, uploadedFile)" id="cipherMessage">
                                             <span ng-show="msg.status == 'toSend'">
-                                                <input type="checkbox" ng-model="publicVarCheckbox"> Public payload
-                                            </span>                                            
-                                            <input type="submit" ng-if="msg.status == 'toSend'" class="btn btn-primary" value="Send message" ng-click="cipherMessage(param, msg, publicVarCheckbox)" id="cipherMessage">
+                                                <input type="checkbox" ng-model="publicVarCheckbox"> Encrypted
+                                            </span>  
                                             <input type="submit" ng-if="msg.status == 'sent'" class="btn btn-primary" value="Read message" ng-click="read(msg)" id="read">
                                         </form>
-                                        <div ng-if="msg.show==1 && actualContract.participants[currentRole] != user.id">
-                                            Waiting for the incoming message
+                                        <div ng-if="msg.show==1 && msg.participant != user.id">
+                                            Waiting for active message
                                         </div>
                                     </li>
 
@@ -248,8 +263,8 @@
     </div>
 </div>
 <script src="lib/app.js"></script>
-<script src="lib/controller.js"></script>
 <script src="lib/service.js"></script>
+<script src="lib/controller.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -291,12 +306,12 @@
         document.getElementById(contractid).parentNode.classList.add('bg-grey');
     }
 
-    var slider = document.getElementById("transactionSlider");
+    /*var slider = document.getElementById("transactionSlider");
 
     slider.oninput = function () {
         const parsedValue = angular.element(document.getElementById('controllerBody')).scope().parsingSliderInput(slider.value);
         angular.element(document.getElementById('controllerBody')).scope().selectTransactionToShow(parsedValue);
-    }
+    }*/
 
     var app = angular.module('monitor', ['ngCookies', 'mobiscroll-form']);
 
@@ -329,7 +344,12 @@
             $scope.steps = 50;
             $scope.martsiaContract = {}
 
-
+        $scope.setFile = function(files) {
+            $scope.$apply(function () {
+                $scope.uploadedFile = files[0];
+                console.log("File set:", $scope.uploadedFile);
+            });
+        };
 
         $scope.launch = async function (task, $index, refresh, parameter) {
                 $("#submitbtn").prop("disabled", true);
@@ -487,15 +507,27 @@
 
 
             $scope.getTask = async function (id) {
+				let users
+                    $http.post("rest/getPart/" + id).then(function (response) {
+                        console.log(response.data)
+                        users = response.data
+                    });
+				
+				var userId = $cookies.get('UserId');
+               
+				
                 setTabActive(id);
                 $scope.msgs = [];
                 $scope.memory = null;
                 let martsiaId = "";
                 for (var i in $scope.instances) {
                     if ($scope.instances[i].id == id) {
-
+                    
                         $scope.actualInstance = $scope.instances[i];
+                        console.log($scope.actualInstance)
+                        
                         $scope.actualContract = $scope.instances[i].deployedContract;
+                        console.log($scope.actualContract)
                         $scope.actualContract.name = $scope.instances[i].name;
                         //$scope.tasks = $scope.actualContract.taskIdAndName;
                         //$scope.valueNames = $scope.actualContract.varNames;
@@ -524,14 +556,25 @@
                     if (m.state == 1 || m.state == 2) {
                         highlightmsg(msg);
                     }
+
+                    
+                    console.log($scope.actualInstance)
+                    const messageRole = $scope.actualContract.taskIdAndRole[msg];
+                    const readerRole = $scope.actualContract.policy[taskIdAndMartsiaId[msg]]
+
+                    const participant = users?.[messageRole] ?? "internal";
+                    const reader = users?.[readerRole] ?? "internal";
                     const element = {
                         name: $scope.actualContract.taskIdAndName[msg],
                         chorChainId: msg,
                         martsiaId: taskIdAndMartsiaId[msg],
                         status: stateMap[m.state],
-                        participant: m.senderParticipant,
-                        role: $scope.actualContract.taskIdAndRole[msg]
+                        participant,
+                        role: messageRole,
+                        reader
                     };
+
+                    console.log(element)
 
                     //console.log(element)
                     $scope.$apply(function (receipt) {
@@ -563,7 +606,7 @@
                     $scope.isLogged = true;
                     $http.post("rest/getUserInfo/" + $cookies.get('UserId')).then(function (response) {
                         $scope.user = response.data;
-                        //console.log($scope.user)
+                        console.log($scope.user)
                     });
                 } else {
                     $scope.isLogged = false;
@@ -903,9 +946,26 @@
             }*/
 
             //STEP1
-            $scope.cipherMessage = async function (inputValue, msg, public) {
+            $scope.cipherMessage = async function (inputValue, msg, public, uploadedFile) {
+                console.log(uploadedFile)
                 //const link = await $scope.stateContract.methods.getInstancePolicy($scope.actualInstance.martsiaId).call();
                 //retrieves the message id of the selected message
+                
+                let fileContent;
+                if (uploadedFile) {
+                    console.log("File selected:", uploadedFile);
+                    const reader = new FileReader();
+
+                    // Example: read file content
+                    reader.onload = function(e) {
+                        fileContent = e.target.result;
+                        console.log("File content:", fileContent);
+                            inputValue = fileContent
+
+                        // Now encrypt fileContent
+                    };
+                    reader.readAsArrayBuffer(uploadedFile); // or readAsArrayBuffer
+                }
                 let messageId;
                 for (const task in $scope.actualContract.taskIdAndName) {
                     if ($scope.actualContract.taskIdAndName[task] == msg.name) {
@@ -935,20 +995,11 @@
                 }
 
 
-                /*const policy = ['(' + $scope.actualInstance.martsiaId + '@AUTH1 and ' + $scope.actualInstance.martsiaId + '@AUTH2 ' +
-                'and ' + $scope.actualInstance.martsiaId + '@AUTH3 and ' + $scope.actualInstance.martsiaId + '@AUTH4) ' +
-                'and (Customer@UT or Insurer@UT)']
-                let requesterRole = "";
-                for (const role in $scope.actualContract.participants) {
-                    // policyRoles += role + "@UT";
-                    if ($scope.actualContract.participants[role] == $cookies.get('UserId')) {
-                        requesterRole = role;
-                    }
-                }*/
+                
                 //todo MANAGE MULTIPLE INPUTS?
                 let publicVarNames = []
                 let publicValues = []
-                if(public){
+                if(!public){
                     
                     console.log("sto mettendo public")
                     console.log(public)

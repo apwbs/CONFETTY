@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -40,6 +41,9 @@ public class ContractObject {
 	private LinkedHashMap<String, String> taskIdAndRole = new LinkedHashMap<String, String>();
 	@Lob
 	private LinkedHashMap<String, Integer> taskIdAndMartsiaId = new LinkedHashMap<String, Integer>();
+	@Lob
+	private LinkedHashMap<Integer, ArrayList<String>> policy = new LinkedHashMap<>();
+
 
 	
 	public LinkedHashMap<String, String> getTaskIdAndRole() {
@@ -90,9 +94,17 @@ public class ContractObject {
 	public void setVarNames(List<String> varNames) {
 		this.varNames = varNames;
 	}
+	public LinkedHashMap<Integer, ArrayList<String>> getPolicy() {
+    return policy;
+}
+
+public void setPolicy(LinkedHashMap<Integer, ArrayList<String>> policy) {
+    this.policy = policy;
+}
 	
 	public ContractObject(String address, HashMap<String, String> taskIdAndName, String abi, String bin, List<String> varNames,
-			LinkedHashMap<String, String> taskIdAndRole, LinkedHashMap<String, Integer> taskIdAndMartsiaId) {
+			LinkedHashMap<String, String> taskIdAndRole, 
+			LinkedHashMap<String, Integer> taskIdAndMartsiaId, LinkedHashMap<Integer, ArrayList<String>> policy) {
 		super();
 		this.address = address;
 		this.taskIdAndName = taskIdAndName;
@@ -101,6 +113,7 @@ public class ContractObject {
 		this.varNames = varNames;
 		this.taskIdAndRole = taskIdAndRole;
 		this.taskIdAndMartsiaId = taskIdAndMartsiaId;
+		this.policy = policy;
 	}
 
 	public LinkedHashMap<String, Integer> getTaskIdAndMartsiaId() {

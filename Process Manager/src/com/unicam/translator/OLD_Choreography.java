@@ -79,7 +79,7 @@ public class OLD_Choreography {
 			choreographyFile = choreography.initial(bpmnFile.getName(), participants, optionalRoles, mandatoryRoles)
 					+ choreographyFile;
 			choreographyFile += choreography.lastFunctions();
-			finalContract = new ContractObject(null, null, null, null, gatewayGuards, taskIdAndRole, taskIdAndMartsiaId);
+			finalContract = new ContractObject(null, null, null, null, gatewayGuards, taskIdAndRole, taskIdAndMartsiaId, null);
 			choreography.fileAll(bpmnFile.getName());
 			System.out.println("messagesvalue:" + Arrays.toString(taskIdAndMartsiaId.values().toArray()));
 			return true;

@@ -315,7 +315,8 @@
           </thead>
           <tbody>
           <tr ng-repeat="(key, value) in martsiaInstance.policy">
-            <td><input type="text" ng-model="key" /></td>
+
+            <td>{{martsiaIdToTaskName[key]}}</td>
             <td ng-repeat="reader in martsiaInstance.policy[key] track by $index">
               <input type="text" ng-model="martsiaInstance.policy[key][$index]" /></td>
             <td>

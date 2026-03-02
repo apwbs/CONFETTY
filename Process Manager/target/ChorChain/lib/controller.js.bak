@@ -5,6 +5,7 @@ var module = angular.module('homePage.controllers', ['ngCookies']);
 module.controller("controller", [ "$scope","$window", "$location", "service", '$cookies',
 		function($scope,$window, $location,service, $cookies) {
 			$scope.instance = {};
+			$scope.martsiaIdToTaskName = {};
 			$scope.model = {};
 			$scope.martsiaInstance = {};
 			$scope.isLogged = false;
@@ -421,6 +422,7 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 
 			$scope.generateMartsiaInstance = function(model, instanceId, martsiaId, instance){
 				$scope.instance = instance;
+				console.log($scope.instance)
 				$scope.model = model;
 				if(Object.keys($scope.martsiaInstance).length === 0 && $scope.martsiaInstance.constructor === Object) {
 					service.deploy(instance.id, $cookies.get('UserId')).then(async function (response) {
@@ -429,6 +431,12 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 							$scope.martsiaInstance = response.data;
 							console.log(response.data);
 							$cookies.put('taskIdAndMartsiaId', JSON.stringify(response.data.taskIdAndMartsiaId));
+							for (let taskId in $scope.martsiaInstance.taskIdAndMartsiaId) {
+							let martsiaId = $scope.martsiaInstance.taskIdAndMartsiaId[taskId];
+							$scope.martsiaIdToTaskName[martsiaId] =
+								$scope.instance.deployedContract.taskIdAndName[taskId];
+							}
+							console.log(martsiaIdToTaskName)
 							//console.log(JSON.parse($cookies.get('taskIdAndMartsiaId')));
 
 						});
@@ -436,7 +444,9 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 				}
 			}
 
+		
 
+		
 			$scope.getContracts = function(){
 				//console.log("COOKIE: " + $cookies.get('UserId'));
 				service.getContracts($cookies.get('UserId')).then(function(response){
@@ -515,6 +525,7 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 					var userId = $cookies.get('UserId');
 					service.setUser(userId).then(function(response){
 						$scope.user = response.data;
+						console.log($scope.user)
 					});
 				}else{
 					$scope.isLogged = false;

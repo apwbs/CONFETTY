@@ -25,7 +25,7 @@ def send_ipfs_link(web3, reader_address, process_instance_id, hash_file):
     }
     signed_tx = web3.eth.account.sign_transaction(tx, authority_private_key)
     tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
-    print(f'tx_hash: {web3.toHex(tx_hash)}  Authority {authority_number}')
+    #print(f'tx_hash: {web3.toHex(tx_hash)}  Authority {authority_number}')
     tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash, timeout=600)
 
 
@@ -92,7 +92,7 @@ def transactions_monitoring(web3):
     while True:
         if not check_block_exists(web3, latest_block):
             if not first:
-                print(f"Waiting for new blocks: Retrying every 1 second... Authority {authority_number}")
+                #print(f"Waiting for new blocks: Retrying every 1 second... Authority {authority_number}")
                 first = True
             # Wait for 1 second before retrying
             #print("----levare 5:", 5)

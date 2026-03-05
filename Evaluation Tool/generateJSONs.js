@@ -4,7 +4,7 @@ const bip39 = require('bip39');
 const Web3 = require('web3');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const argv = yargs(hideBin(process.argv))
     .option('e', {
@@ -989,33 +989,47 @@ function exclusiveTest2(requests, value) {
     return requests;
 }
 
-
 function fetchUserIdSync() {
     const deasync = require('deasync');
     let isDone = false;
     let userId;
+
     (async () => {
-        const client = new MongoClient('mongodb://localhost:27017');
+        const client = new MongoClient("mongodb://localhost:27017");
         await client.connect();
-        let userDocument = null;
-        while (!userDocument) {
-            userDocument = await client.db('ChorChain').collection('User').findOne({});
-            if (!userDocument) {
-                console.log('No user found, retrying...');
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
+
+        const db = client.db("ChorChain");
+        const users = db.collection("User");
+
+        let userDocument = await users.findOne({});
+
+        if (!userDocument) {
+            console.log("No user found. Creating default user...");
+
+            const defaultUser = {
+                _id: new ObjectId("69a9957c3ce1d601b7d264fd"),
+                address: "0xa5B6B3729Cf8f377EF6F97d87C49661b36Ed02bB"
+            };
+
+            await users.insertOne(defaultUser);
+            userDocument = defaultUser;
         }
+
         userId = userDocument._id.toString();
+
         await client.close();
         isDone = true;
-    })();
-    // Block the event loop until the async operation is finished
+    })().catch(err => {
+        console.error(err);
+        isDone = true;
+    });
+
     while (!isDone) {
         deasync.runLoopOnce();
     }
+
     return userId;
 }
-
 
 function main() {
 

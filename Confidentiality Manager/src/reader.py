@@ -67,15 +67,15 @@ def actual_decryption(remaining, public_parameters, user_sk):
     test = remaining['CipheredKey'].encode('utf-8')
     ct = bytesToObject(test, groupObj)
     #print("ct:",ct)
-    print(public_parameters)
-    print(user_sk)
-    print(ct)
+    #print(public_parameters)
+    #print(user_sk)
+    #print(ct)
     v2 = maabe.decrypt(public_parameters, user_sk, ct)
     #print("v2:",v2)
     v2 = groupObj.serialize(v2)
     #print("v2_2:",v2)
     decryptedFile = cryptocode.decrypt(remaining['EncryptedFile'], str(v2))
-    print("decrypted data length:", len(decryptedFile))
+    #print("decrypted data length:", len(decryptedFile))
     return decryptedFile
 
 

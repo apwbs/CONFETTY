@@ -149,13 +149,13 @@ def run_iteration(iteration: int) -> bool:
         
     # Start the API process inside the Docker container using WSL
     api_process = subprocess.Popen(
-        ["wsl", "docker", "exec", "-w", "/CONFETTY/Confidentiality Manager/src/", "-it", "confettone",
-         "python3", "/CONFETTY/Confidentiality Manager/src/api.py"],
-        stdout=subprocess.PIPE,
+        ["python3", "/CONFETTY/Confidentiality Manager/src/api.py"],
+        cwd="/CONFETTY/Confidentiality Manager/src",
+	stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+	universal_newlines=True,
         text=True
     )
-    
     # Allow some time for the API to initialize
     time.sleep(2)
     
@@ -179,22 +179,22 @@ def run_iteration(iteration: int) -> bool:
         api_process.terminate()
         # Also kill any lingering API processes in the Docker container
         subprocess.run(
-            ["wsl", "docker", "exec", "confettone", "pkill", "-f", "api.py"],
+            ["pkill", "-f", "api.py"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
-        
+
     # Increment the success counter if the Node.js process succeeded
     if node_success:
         success_count += 1
         
     # Clean up: remove the first file from the Ganache temporary logs folder, if it exists
-    folder_path = os.path.join("./Ganache_Temp_Logs")
-    files = os.listdir(folder_path)
-    if files:
-        file_path = os.path.join(folder_path, files[0])
-        os.remove(file_path)
-        print(f"Deleted {file_path}")
+    #folder_path = os.path.join("./Ganache_Temp_Logs")
+    #files = os.listdir(folder_path)
+    #if files:
+    #    file_path = os.path.join(folder_path, files[0])
+    #    os.remove(file_path)
+    #    print(f"Deleted {file_path}")
         
     # Send a POST request via curl (to create a new log file)
     subprocess.run(

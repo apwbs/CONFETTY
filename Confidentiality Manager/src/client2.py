@@ -58,7 +58,7 @@ def transactions_monitoring(latest_block):
             block = web3.eth.getBlock(min_round, True)
             for transaction in block.transactions:
                 if transaction['to'] == reader_address and 'input' in transaction and transaction['from'] in list_auth and transaction['from'] not in finished:
-                    print(f"Key retrieved from {authorities_names[authorities_addresses.index(transaction['from'])]}!")
+                    #print(f"Key retrieved from {authorities_names[authorities_addresses.index(transaction['from'])]}!")
                     retrieve_key(transaction)
                     finished.append(transaction['from'])
                     #print(finished)
@@ -68,7 +68,7 @@ def transactions_monitoring(latest_block):
             first = False
         except BlockNotFound as e:
             if first == False:
-                    print(f"Waiting for new blocks: Retrying every 1 second...")
+                    #print(f"Waiting for new blocks: Retrying every 1 second...")
                     first = True
             # Wait for 0.2 second before retrying
             #print("----levare 5: ", 5)

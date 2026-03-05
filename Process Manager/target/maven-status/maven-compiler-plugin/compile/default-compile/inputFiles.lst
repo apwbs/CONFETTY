@@ -1,13 +1,13 @@
 /CONFETTY/Process Manager/src/com/unicam/translator/MartsiaTranslator.java
 /CONFETTY/Process Manager/src/com/unicam/model/ContractObject.java
-/CONFETTY/Process Manager/src/com/unicam/model/Instance.java
 /CONFETTY/Process Manager/src/com/unicam/rest/Main.java
+/CONFETTY/Process Manager/src/com/unicam/model/Instance.java
 /CONFETTY/Process Manager/src/com/unicam/rest/Test_event.java
 /CONFETTY/Process Manager/src/com/unicam/rest/Controller.java
 /CONFETTY/Process Manager/src/com/unicam/translator/ChoreographyTask.java
 /CONFETTY/Process Manager/src/com/unicam/model/User.java
-/CONFETTY/Process Manager/src/com/unicam/model/Parameters.java
 /CONFETTY/Process Manager/src/com/unicam/translator/OLD_Choreography.java
+/CONFETTY/Process Manager/src/com/unicam/model/Parameters.java
 /CONFETTY/Process Manager/src/com/unicam/model/Model.java
 /CONFETTY/Process Manager/src/com/unicam/model/TaskObject.java
 /CONFETTY/Process Manager/src/com/unicam/rest/ContractFunctions.java

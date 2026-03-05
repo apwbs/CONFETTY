@@ -161,8 +161,7 @@
                                 <button type="button" style="display: none" id="js-preview"
                                         data-value="{{actualContract.name}}"></button>
                                 <ul class="list-group">
-                                    {{actualInstance.deployedContract.taskIdAndMartsiaId[msg.chorChainId]}}
-                                    {{user.id}}
+                                    
                                     <li class="list-group-item my-2" ng-repeat="msg in msgs" ng-if="((msg.status == 'toSend' && msg.participant == user.id) ||  
                                     (msg.status == 'sent' && msg.reader == user.id)) && 
                                     msg.role != 'internal'">

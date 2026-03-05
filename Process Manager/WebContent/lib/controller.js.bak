@@ -436,7 +436,6 @@ module.controller("controller", [ "$scope","$window", "$location", "service", '$
 							$scope.martsiaIdToTaskName[martsiaId] =
 								$scope.instance.deployedContract.taskIdAndName[taskId];
 							}
-							console.log(martsiaIdToTaskName)
 							//console.log(JSON.parse($cookies.get('taskIdAndMartsiaId')));
 
 						});

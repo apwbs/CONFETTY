@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="_tTv5YOycEeiHGOQ2NkJZNQ" targetNamespace="http://www.signavio.com">
+  <bpmn2:message id="Message_18b45ev" />
+  <bpmn2:choreography id="Choreography">
+    <bpmn2:participant id="Participant_0xqrkbp" name="Partici@ pa@ nt 1" />
+    <bpmn2:participant id="Participant_0kq72dw" name="Par_ @ _? @ 2" />
+    <bpmn2:messageFlow id="MessageFlow_1yqffcx" sourceRef="Participant_0xqrkbp" targetRef="Participant_0kq72dw" messageRef="Message_18b45ev" />
+    <bpmn2:startEvent id="StartEvent_1ajhtym">
+      <bpmn2:outgoing>SequenceFlow_0eztjcl</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:endEvent id="EndEvent_0m8bdeu">
+      <bpmn2:incoming>SequenceFlow_1il896y</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:choreographyTask id="ChoreographyTask_0ntzye6" name="New Activity" initiatingParticipantRef="Participant_0xqrkbp">
+      <bpmn2:incoming>SequenceFlow_0eztjcl</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_1il896y</bpmn2:outgoing>
+      <bpmn2:participantRef>Participant_0xqrkbp</bpmn2:participantRef>
+      <bpmn2:participantRef>Participant_0kq72dw</bpmn2:participantRef>
+      <bpmn2:messageFlowRef>MessageFlow_1yqffcx</bpmn2:messageFlowRef>
+    </bpmn2:choreographyTask>
+    <bpmn2:sequenceFlow id="SequenceFlow_0eztjcl" sourceRef="StartEvent_1ajhtym" targetRef="ChoreographyTask_0ntzye6" />
+    <bpmn2:sequenceFlow id="SequenceFlow_1il896y" sourceRef="ChoreographyTask_0ntzye6" targetRef="EndEvent_0m8bdeu" />
+  </bpmn2:choreography>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_Choreography_1" bpmnElement="Choreography">
+      <bpmndi:BPMNShape id="StartEvent_1ajhtym_di" bpmnElement="StartEvent_1ajhtym">
+        <dc:Bounds x="359" y="126" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0m8bdeu_di" bpmnElement="EndEvent_0m8bdeu">
+        <dc:Bounds x="804" y="126" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ChoreographyTask_0ntzye6_di" bpmnElement="ChoreographyTask_0ntzye6">
+        <dc:Bounds x="522" y="104" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1dco7pd" bpmnElement="Participant_0xqrkbp" isMessageVisible="false" participantBandKind="top_initiating" choreographyActivityShape="ChoreographyTask_0ntzye6_di">
+        <dc:Bounds x="522" y="104" width="100" height="20" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0zr3cj5" bpmnElement="Participant_0kq72dw" isMessageVisible="false" participantBandKind="bottom_non_initiating" choreographyActivityShape="ChoreographyTask_0ntzye6_di">
+        <dc:Bounds x="522" y="164" width="100" height="20" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0eztjcl_di" bpmnElement="SequenceFlow_0eztjcl">
+        <di:waypoint x="395" y="144" />
+        <di:waypoint x="521" y="144" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1il896y_di" bpmnElement="SequenceFlow_1il896y">
+        <di:waypoint x="623" y="144" />
+        <di:waypoint x="804" y="144" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+    <bpmndi:BPMNLabelStyle id="BPMNLabelStyle_1">
+      <dc:Font name="arial" size="9" />
+    </bpmndi:BPMNLabelStyle>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

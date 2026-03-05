@@ -149,8 +149,8 @@ def run_iteration(iteration: int) -> bool:
         
     # Start the API process inside the Docker container using WSL
     api_process = subprocess.Popen(
-        ["wsl", "docker", "exec", "-w", "/MARTSIA-KoB-API/src/", "-it", "martsia_ethereum_container",
-         "python3", "/MARTSIA-KoB-API/src/api.py"],
+        ["wsl", "docker", "exec", "-w", "/CONFETTY/Confidentiality Manager/src/", "-it", "confettone",
+         "python3", "/CONFETTY/Confidentiality Manager/src/api.py"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True
@@ -179,7 +179,7 @@ def run_iteration(iteration: int) -> bool:
         api_process.terminate()
         # Also kill any lingering API processes in the Docker container
         subprocess.run(
-            ["wsl", "docker", "exec", "martsia_ethereum_container", "pkill", "-f", "api.py"],
+            ["wsl", "docker", "exec", "confettone", "pkill", "-f", "api.py"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
@@ -195,8 +195,6 @@ def run_iteration(iteration: int) -> bool:
         file_path = os.path.join(folder_path, files[0])
         os.remove(file_path)
         print(f"Deleted {file_path}")
-    else:
-        print("No file found in the folder.")
         
     # Send a POST request via curl (to create a new log file)
     subprocess.run(

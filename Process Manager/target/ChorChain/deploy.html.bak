@@ -161,8 +161,9 @@
                                 <button type="button" style="display: none" id="js-preview"
                                         data-value="{{actualContract.name}}"></button>
                                 <ul class="list-group">
-                                    <li class="list-group-item my-2" ng-repeat="msg in msgs" ng-if="(msg.status == 'toSend' && msg.participant == user.id) &&  
-                                    (msg.status == 'sent' && actualInstance.deployedContract.taskIdAndMartsiaId[msg.chorChainId] == user.id) && 
+                                    
+                                    <li class="list-group-item my-2" ng-repeat="msg in msgs" ng-if="((msg.status == 'toSend' && msg.participant == user.id) ||  
+                                    (msg.status == 'sent' && msg.reader == user.id)) && 
                                     msg.role != 'internal'">
                                         <div class="float-right">Status: {{msg.status}}
                                         </div>
@@ -522,7 +523,10 @@
                     if ($scope.instances[i].id == id) {
                     
                         $scope.actualInstance = $scope.instances[i];
+                        console.log($scope.actualInstance)
+                        
                         $scope.actualContract = $scope.instances[i].deployedContract;
+                        console.log($scope.actualContract)
                         $scope.actualContract.name = $scope.instances[i].name;
                         //$scope.tasks = $scope.actualContract.taskIdAndName;
                         //$scope.valueNames = $scope.actualContract.varNames;
@@ -553,15 +557,20 @@
                     }
 
                     
-                    
-                    const messageRole = $scope.actualContract.taskIdAndRole[msg]
+                    console.log($scope.actualInstance)
+                    const messageRole = $scope.actualContract.taskIdAndRole[msg];
+                    const readerRole = $scope.actualContract.policy[taskIdAndMartsiaId[msg]]
+
+                    const participant = users?.[messageRole] ?? "internal";
+                    const reader = users?.[readerRole] ?? "internal";
                     const element = {
                         name: $scope.actualContract.taskIdAndName[msg],
                         chorChainId: msg,
                         martsiaId: taskIdAndMartsiaId[msg],
                         status: stateMap[m.state],
-                        participant: users[messageRole],
-                        role: messageRole
+                        participant,
+                        role: messageRole,
+                        reader
                     };
 
                     console.log(element)
@@ -596,7 +605,7 @@
                     $scope.isLogged = true;
                     $http.post("rest/getUserInfo/" + $cookies.get('UserId')).then(function (response) {
                         $scope.user = response.data;
-                        //console.log($scope.user)
+                        console.log($scope.user)
                     });
                 } else {
                     $scope.isLogged = false;

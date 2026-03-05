@@ -7,17 +7,37 @@ import ipfshttpclient
 from env_manager import authorities_names, authorities_names_and_addresses
 
 
+# Normalize the first part of the role string for the frontend
+def normalize(word):
+    if "*" in word:
+        word = "*" + word
+    return "".join(
+        "*US*" if c == "_" else
+        "*SP*" if c == " " else
+        "*AT*" if c == "@" else
+        f"*{c.upper()}*" if c.islower() else
+        c
+        for c in word
+    )
+
+
+# Normalize the role string for the frontend
+def normalize_total(policy):
+    last_at = policy.rfind("@")
+    first_part = normalize(policy[:last_at])
+    return first_part + policy[last_at:]
+
+
 # The Attribute Certifier saves on the blockchain the IPFS link containing the actors' attributes
 def generate_attributes(roles, process_instance_id):
     api = ipfshttpclient.connect('/ip4/127.0.0.1/tcp/5001')
     authorities_names_value = authorities_names()
     dict_users = {}
     for actor, list_roles in roles.items():
-            dict_users[actor] = [str(process_instance_id)+'@'+ name for name in authorities_names_value] + [role for role in list_roles]
+            dict_users[actor] = [str(process_instance_id)+'@'+ name for name in authorities_names_value] + [normalize_total(role) for role in list_roles]
     
     f = io.StringIO()
     dict_users_dumped = json.dumps(dict_users)
-    #print("Roles:", dict_users_dumped)
     
     f.write('"process_instance_id": ' + str(process_instance_id) + '####')
     f.write(dict_users_dumped)
@@ -47,12 +67,10 @@ def generate_policies(policies, process_instance_id):
         temporal = ""
         for authority_name, authority_address in authorities_names_and_addresses():
             temporal = temporal + str(process_instance_id) + '@' + authority_name + ' and '
-        access_policy[policy] = ('(' + temporal[:-5] + ') and (' + policies[policy] + ')')
-
+        access_policy[policy] = ('(' + temporal[:-5] + ') and (' + normalize_total(policies[policy]) + ')')
     f = io.StringIO()
     dict_policies_dumped = json.dumps(access_policy)
     #print("Policies:", dict_policies_dumped)
-
     f.write('"process_instance_id": ' + str(process_instance_id) + '####')
     f.write(dict_policies_dumped)
     f.seek(0)
